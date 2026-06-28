@@ -1,9 +1,14 @@
 [variables]
 NODE_ENV = "production"
 
+[phases.setup]
+nixpkgs = ["pnpm"]
+
 [phases.build]
-dependsOn = ["setup"]
 cmds = ["pnpm install --frozen-lockfile", "pnpm run build"]
 
-[phases.start]
-cmd = "pnpm start"
+[phases.install]
+cmds = []
+
+[start]
+cmd = "pnpm preview"
