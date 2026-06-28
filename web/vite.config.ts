@@ -88,10 +88,15 @@ const checkDefaultApiEnv = (): PluginOption => ({
     },
 });
 
-export default defineConfig({
+export default defineConfig(({ command, isPreview }) => ({
     plugins: [
         checkDefaultApiEnv(),
-        basicSSL(),
+        // basicSSL serves self-signed HTTPS; only needed for the dev server.
+        // For `vite preview` behind a reverse proxy (Traefik/Dokploy) the
+        // backend must speak plain HTTP, otherwise the proxy returns 502.
+        // Note: `command` is "serve" for BOTH dev and preview, so also gate
+        // on !isPreview to keep preview on plain HTTP.
+        ...(command === "serve" && !isPreview ? [basicSSL()] : []),
         sveltekit(),
         enableCOEP,
         exposeLibAV,
@@ -124,7 +129,16 @@ export default defineConfig({
         },
         proxy: {}
     },
+    preview: {
+        host: true,
+        port: Number(process.env.PORT) || 3000,
+        allowedHosts: true,
+        headers: {
+            "Cross-Origin-Opener-Policy": "same-origin",
+            "Cross-Origin-Embedder-Policy": "require-corp"
+        }
+    },
     optimizeDeps: {
         exclude: ["@imput/libav.js-remux-cli"]
     },
-});
+}));
