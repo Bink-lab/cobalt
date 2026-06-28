@@ -2,13 +2,13 @@
 NODE_ENV = "production"
 
 [phases.setup]
-nixpkgs = ["pnpm"]
+nixpkgs = ["nodejs_24", "npm-9_x"]
+
+[phases.install]
+cmds = ["corepack enable", "corepack prepare pnpm@9 --activate"]
 
 [phases.build]
 cmds = ["pnpm install --frozen-lockfile", "pnpm run build"]
 
-[phases.install]
-cmds = []
-
 [start]
-cmd = "pnpm preview --host 0.0.0.0"
+cmd = "pnpm preview --host 0.0.0.0 --port 3000"
