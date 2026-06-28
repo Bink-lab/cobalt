@@ -11,4 +11,4 @@ cmds = ["pnpm install --frozen-lockfile", "pnpm run build"]
 cmds = []
 
 [start]
-cmd = "pnpm preview"
+cmd = "pnpm preview --host 0.0.0.0"
