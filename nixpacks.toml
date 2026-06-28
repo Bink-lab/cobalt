@@ -2,13 +2,13 @@
 NODE_ENV = "production"
 
 [phases.setup]
-nixpkgs = ["nodejs_24"]
+nixpkgs = ["nodejs_22"]
 
 [phases.install]
 cmds = [
     "corepack enable",
     "corepack prepare pnpm@9.6.0 --activate",
-    "pnpm install --frozen-lockfile",
+    "pnpm install --frozen-lockfile --filter @imput/cobalt-web...",
 ]
 
 [phases.build]
